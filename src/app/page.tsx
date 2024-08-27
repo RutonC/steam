@@ -18,7 +18,7 @@ import { toast } from '@/components/ui/use-toast'
 const createSendInfo = z.object({
   name:z.string().min(3,"Seu nome deve ser 3 caracteres no mínimo"),
   email:z.string().email("Email inválido"),
-  phone:z.string().regex(new RegExp("^(84|85|87|86|83|82)[0-9]{0,7}/*$"),"Número inválido"),
+  phone:z.string().regex(new RegExp("^(84|85|87|86|83|82)[0-9]{0,7}/*$"),"Número inválido!"),
   address:z.string(),
    check:z.string().refine(val => val === 'on', {
     message: "Você deve aceitar as políticas de privacidade"}),
