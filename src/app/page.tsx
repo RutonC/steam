@@ -27,15 +27,15 @@ const createSendInfo = z.object({
 type CreateSendInfo = z.infer<typeof createSendInfo>
 
 function Subscription() {
-  const [checked, setChecked] = useState();
+  const [loading, setIsLoading] = useState<boolean>(false);
 
   const {register,handleSubmit, formState:{errors}} = useForm<CreateSendInfo>({
     resolver:zodResolver(createSendInfo)
   });
 
   const handleSend = async (values:CreateSendInfo) =>{
-   try {
-   const response = await fetch("https://api.emailjs.com/api/v1.0/email/send",
+   setIsLoading(true);
+   fetch("https://api.emailjs.com/api/v1.0/email/send",
       {
         method:"POST",
         headers:{
@@ -48,31 +48,32 @@ function Subscription() {
     "template_params": {
 			"from_name":"edmilton@comunika.co.mz",
 			"to_name":"inscricao@comunika.co.mz",
-       "message":(<>
-        <div className='flex flex-col space-y-1'>
-          <span>{values.name}</span>
-          <span>{values.phone}</span>
-          <span>{values.email}</span>
-          <span>{values.address}</span>
-        </div>
-       </>)
+       "message":`${values.name}, ${values.phone}, ${values.email}, ${values.address} `
 		}
         })
       }
-    )
+    ).then(data=> {
+      console.log("Dados sao: ", data);
+      if(data.status === 200){
+        toast({
+          title:"Dados de Inscrição",
+          description:"Seus dados de inscrição foram enviados com sucesso! Entraremos em contacto brevemente."
+        });
+        setIsLoading(false);
+      }else{
+        toast({
+          title:"Erro",
+          description:"Ocorreu um erro durante o envio dos dados. Tente mais tarde!"
+        });
+        setIsLoading(false);
+      }
+    }).catch(error => {
+      console.log(error)
+    })
 
-    const data = await response.json();
-    console.log({values:values,data:data});
-    if(data){
-      toast({
-        title:"Dados de Inscrição",
-        description:"Seus dados de inscrição foram enviados com sucesso! Entraremos em contacto brevemente."
-      })
-    }
-
-   } catch (error) {
     
-   }
+
+   
   }
   return (
     <div className='back h-full w-screen flex items-center justify-center px-72'>
@@ -121,7 +122,7 @@ function Subscription() {
                 </div>
                 {errors.check && <span className="text-red-500 text-sm">{errors.check.message}</span>}
               </div>
-              <Button className='bg-colorTwo hover:bg-colorFive'>
+              <Button disabled={loading} className={`bg-colorTwo hover:bg-colorFive ${loading ?? 'bg-slate-500'}`}>
                 Enviar
               </Button>
             </div>
