@@ -1,113 +1,137 @@
-import Image from "next/image";
+"use client"
+import React, { useState } from 'react'
+import {Presentation, Computer, Cog} from 'lucide-react'
+import {Input} from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import {zodResolver} from '@hookform/resolvers/zod'
+import {useForm} from 'react-hook-form'
+import {z} from 'zod'
+import { Label } from '@/components/ui/label'
+import { Checkbox } from '@/components/ui/checkbox'
+import Link from 'next/link'
+import SideLeft from '@/components/side-left'
+import { Dialog, DialogTrigger } from '@/components/ui/dialog'
+import { ModalPrivacy } from '@/components/modal-privacy'
+import { toast } from '@/components/ui/use-toast'
 
-export default function Home() {
+
+const createSendInfo = z.object({
+  name:z.string().min(3,"Seu nome deve ser 3 caracteres no mínimo"),
+  email:z.string().email("Email inválido"),
+  phone:z.string().regex(new RegExp("^(84|85|87|86|83|82)[0-9]{0,7}/*$"),"Número inválido"),
+  address:z.string(),
+   check:z.string().refine(val => val === 'on', {
+    message: "Você deve aceitar as políticas de privacidade"}),
+})
+
+type CreateSendInfo = z.infer<typeof createSendInfo>
+
+function Subscription() {
+  const [checked, setChecked] = useState();
+
+  const {register,handleSubmit, formState:{errors}} = useForm<CreateSendInfo>({
+    resolver:zodResolver(createSendInfo)
+  });
+
+  const handleSend = async (values:CreateSendInfo) =>{
+   try {
+   const response = await fetch("https://api.emailjs.com/api/v1.0/email/send",
+      {
+        method:"POST",
+        headers:{
+          'Content-Type':"application/json"
+        },
+        body:JSON.stringify({
+          "service_id": "service_kunuj3r",
+    "template_id": "template_mboqt2i",
+    "user_id": "j4jq9L4NzPnJmcWUw",
+    "template_params": {
+			"from_name":"edmilton@comunika.co.mz",
+			"to_name":"inscricao@comunika.co.mz",
+       "message":(<>
+        <div className='flex flex-col space-y-1'>
+          <span>{values.name}</span>
+          <span>{values.phone}</span>
+          <span>{values.email}</span>
+          <span>{values.address}</span>
+        </div>
+       </>)
+		}
+        })
+      }
+    )
+
+    const data = await response.json();
+    console.log({values:values,data:data});
+    if(data){
+      toast({
+        title:"Dados de Inscrição",
+        description:"Seus dados de inscrição foram enviados com sucesso! Entraremos em contacto brevemente."
+      })
+    }
+
+   } catch (error) {
+    
+   }
+  }
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <div className='back h-full w-screen flex items-center justify-center px-72'>
+      <div className='grid md:grid-cols-3 grid-cols-1 shadow-sm'>
+        <SideLeft/>
+        <div className='bg-slate-100/30 backdrop-blur-sm col-span-2 py-16 px-36'>
+         <div>
+          <span className='font-bold text-3xl'>Subscreva-se a <br/><span className='text-colorOne'>S</span><span className='text-colorTwo'>T</span><span className='text-colorThree'>E</span><span className='text-colorFour'>A</span><span className='text-colorFive'>M</span></span>
+
+          <form onSubmit={handleSubmit(handleSend)} className='space-y-4 mt-8'>
+
+            <div>
+            <Label htmlFor='name' className='text-sm font-medium text-colorFive'>Nome completo</Label>
+            <Input {...register("name")} id="name" type='text' placeholder='Seu nome completo' className='mt-1 w-full rounded-lg border-colorTwo bg-slate-50/30 px-3 py-2 text-[#333] placeholder:text-muted-foreground focus:border-colorTwo focus:ring-colorTwo'/>
+            {errors.name && <span className="text-red-500 text-sm">{errors.name.message}</span>}
+            </div>
+            <div className='grid grid-cols-2 gap-4'>
+            <div>
+            <Label htmlFor='phone' className='text-sm font-medium text-colorFive'>Número com whatsapp</Label>
+            <Input {...register("phone")} id="phone" type='text' placeholder='Número com whatsapp' className='mt-1 w-full rounded-lg border-colorTwo bg-slate-50/30 px-3 py-2 text-[#333] placeholder:text-muted-foreground focus:border-colorTwo focus:ring-colorTwo'/>
+            {errors.phone && <span className="text-red-500 text-sm">{errors.phone.message}</span>}
+            </div>
+            <div>
+            <Label htmlFor='email' className='text-sm font-medium text-colorFive'>E-mail</Label>
+            <Input {...register("email")} id="email" type='email' placeholder='Seu email' className='mt-1 w-full rounded-lg border-colorTwo bg-slate-50/30 px-3 py-2 text-[#333] placeholder:text-muted-foreground focus:border-colorTwo focus:ring-colorTwo'/>
+            {errors.email && <span className="text-red-500 text-sm">{errors.email.message}</span>}
+            </div>
+            </div>
+            <div>
+            <Label htmlFor='address' className='text-sm font-medium text-colorFive'>Endereço</Label>
+            <Input {...register("address")} id="address" type='text' placeholder='Seu endereço' className='mt-1 w-full rounded-lg border-colorTwo bg-slate-50/30 px-3 py-2 text-[#333] placeholder:text-muted-foreground focus:border-colorTwo focus:ring-colorTwo'/>
+            {errors.address && <span className="text-red-500 text-sm">{errors.address.message}</span>}
+            </div>
+            <div className='grid grid-cols-3'>
+              <div className='col-span-2'>
+                <div className='flex flex-row justify-items-center items-center'>
+                <Checkbox {...register("check")} className='mr-4 ' />
+               <span className='text-sm text-gray-400'>
+               Aceita com todas nossas <Dialog>
+                <DialogTrigger>
+               <span className='text-colorTwo cursor-pointer'> Políticas de Privacidade</span>
+                </DialogTrigger>
+                <ModalPrivacy message='lo'/>
+               </Dialog> 
+                </span> 
+                </div>
+                {errors.check && <span className="text-red-500 text-sm">{errors.check.message}</span>}
+              </div>
+              <Button className='bg-colorTwo hover:bg-colorFive'>
+                Enviar
+              </Button>
+            </div>
+
+          </form>
+         </div>
         </div>
       </div>
-
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  );
+    </div>
+  )
 }
+
+export default Subscription

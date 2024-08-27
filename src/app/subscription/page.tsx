@@ -19,7 +19,7 @@ const createSendInfo = z.object({
   email:z.string().email("Email inválido"),
   phone:z.string().regex(new RegExp("^(84|85|87|86|83|82)[0-9]{0,7}/*$"),"Número inválido"),
   address:z.string(),
-   check:z.string().refine(val => val === 'checked', {
+   check:z.string().refine(val => val === 'on', {
     message: "Você deve aceitar as políticas de privacidade"}),
 })
 
@@ -32,11 +32,36 @@ function Subscription() {
     resolver:zodResolver(createSendInfo)
   });
 
-  const handleSend = (values:CreateSendInfo) =>{
-    console.log(values)
-  }
+  const handleSend = async (values:CreateSendInfo) =>{
+   try {
+   const response = await fetch("https://api.emailjs.com/api/v1.0/email/send",
+      {
+        method:"POST",
+        headers:{
+          'Content-Type':"application/json"
+        },
+        body:JSON.stringify({
+          "service_id": "service_kunuj3r",
+    "template_id": "template_mboqt2i",
+    "user_id": "j4jq9L4NzPnJmcWUw",
+    "template_params": {
+			"from_name":"edmilton@comunika.co.mz",
+			"to_name":"edmilton.mendes13@gmail.com",
+        "username": "James",
+       "message":"Ola como está isso é um teste"
+		}
+        })
+      }
+    )
 
-  console.log(checked)
+    const data = await response.json();
+    console.log({values:values,data:data});
+    
+
+   } catch (error) {
+    
+   }
+  }
   return (
     <div className='back h-full w-screen flex items-center justify-center px-72'>
       <div className='grid md:grid-cols-3 grid-cols-1 shadow-sm'>
@@ -72,7 +97,7 @@ function Subscription() {
             <div className='grid grid-cols-3'>
               <div className='col-span-2'>
                 <div className='flex flex-row justify-items-center items-center'>
-                <Checkbox checked={checked} onCheckedChange={(checked)=>setChecked} className='mr-4 ' />
+                <Checkbox {...register("check")} className='mr-4 ' />
                <span className='text-sm text-gray-400'>
                Aceita com todas nossas <Dialog>
                 <DialogTrigger>
