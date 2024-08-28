@@ -76,62 +76,159 @@ function Subscription() {
    
   }
   return (
-    <div className='back h-full w-screen flex items-center justify-center '>
-      <div className='grid md:grid-cols-3 grid-cols-1 shadow-sm w-2/3'>
-        <SideLeft/>
-        <div className='bg-slate-100/30 backdrop-blur-sm col-span-2 py-16 px-12 mds md:px-36'>
-         <div>
-          <span className='font-bold text-3xl'>Subscreva-se a <br/><span className='text-colorOne'>S</span><span className='text-colorTwo'>T</span><span className='text-colorThree'>E</span><span className='text-colorFour'>A</span><span className='text-colorFive'>M</span></span>
+    // <div className='back h-screen w-screen flex items-center justify-center '>
+    //   <div className='grid md:grid-cols-3 grid-cols-1 sm:grid-cols-1 shadow-sm w-2/3'>
+    //     <SideLeft/>
+    //     <div className='bg-slate-100/30 backdrop-blur-sm col-span-2 py-16 px-12 mds md:px-36'>
+    //      <div>
+    //       <span className='font-bold text-3xl'>Subscreva-se a <br/><span className='text-colorOne'>S</span><span className='text-colorTwo'>T</span><span className='text-colorThree'>E</span><span className='text-colorFour'>A</span><span className='text-colorFive'>M</span></span>
 
-          <form onSubmit={handleSubmit(handleSend)} className='space-y-4 mt-8'>
+    //       <form onSubmit={handleSubmit(handleSend)} className='space-y-4 mt-8'>
 
-            <div>
-            <Label htmlFor='name' className='text-sm font-medium text-colorFive'>Nome completo</Label>
-            <Input {...register("name")} id="name" type='text' placeholder='Seu nome completo' className='mt-1 w-full rounded-lg border-colorTwo bg-slate-50/30 px-3 py-2 text-[#333] placeholder:text-muted-foreground focus:border-colorTwo focus:ring-colorTwo'/>
+    //         <div>
+    //         <Label htmlFor='name' className='text-sm font-medium text-colorFive'>Nome completo</Label>
+    //         <Input {...register("name")} id="name" type='text' placeholder='Seu nome completo' className='mt-1 w-full rounded-lg border-colorTwo bg-slate-50/30 px-3 py-2 text-[#333] placeholder:text-muted-foreground focus:border-colorTwo focus:ring-colorTwo'/>
+    //         {errors.name && <span className="text-red-500 text-sm">{errors.name.message}</span>}
+    //         </div>
+    //         <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+    //         <div>
+    //         <Label htmlFor='phone' className='text-sm font-medium text-colorFive'>Número com whatsapp</Label>
+    //         <Input {...register("phone")} id="phone" type='text' placeholder='Número com whatsapp' className='mt-1 w-full rounded-lg border-colorTwo bg-slate-50/30 px-3 py-2 text-[#333] placeholder:text-muted-foreground focus:border-colorTwo focus:ring-colorTwo'/>
+    //         {errors.phone && <span className="text-red-500 text-sm">{errors.phone.message}</span>}
+    //         </div>
+    //         <div>
+    //         <Label htmlFor='email' className='text-sm font-medium text-colorFive'>E-mail</Label>
+    //         <Input {...register("email")} id="email" type='email' placeholder='Seu email' className='mt-1 w-full rounded-lg border-colorTwo bg-slate-50/30 px-3 py-2 text-[#333] placeholder:text-muted-foreground focus:border-colorTwo focus:ring-colorTwo'/>
+    //         {errors.email && <span className="text-red-500 text-sm">{errors.email.message}</span>}
+    //         </div>
+    //         </div>
+    //         <div>
+    //         <Label htmlFor='address' className='text-sm font-medium text-colorFive'>Endereço</Label>
+    //         <Input {...register("address")} id="address" type='text' placeholder='Seu endereço' className='mt-1 w-full rounded-lg border-colorTwo bg-slate-50/30 px-3 py-2 text-[#333] placeholder:text-muted-foreground focus:border-colorTwo focus:ring-colorTwo'/>
+    //         {errors.address && <span className="text-red-500 text-sm">{errors.address.message}</span>}
+    //         </div>
+    //         <div className='grid grid-cols-3'>
+    //           <div className='col-span-2'>
+    //             <div className='flex flex-row justify-items-center items-center'>
+    //             <Checkbox {...register("check")} className='mr-4 ' />
+    //            <span className='text-sm text-gray-400'>
+    //            Aceita com todas nossas <Dialog>
+    //             <DialogTrigger>
+    //            <span className='text-colorTwo cursor-pointer'> Políticas de Privacidade</span>
+    //             </DialogTrigger>
+    //             <ModalPrivacy message='lo'/>
+    //            </Dialog> 
+    //             </span> 
+    //             </div>
+    //             {errors.check && <span className="text-red-500 text-sm">{errors.check.message}</span>}
+    //           </div>
+    //           <Button disabled={loading} className={`bg-colorTwo hover:bg-colorFive ${loading ?? 'bg-slate-500'}`}>
+    //             Enviar
+    //           </Button>
+    //         </div>
+
+    //       </form>
+    //      </div>
+    //     </div>
+    //   </div>
+    // </div>
+
+    <div className='back h-screen w-screen flex items-center justify-center'>
+  <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 shadow-sm w-full sm:w-2/3'>
+    <SideLeft />
+    <div className='bg-slate-100/30 backdrop-blur-sm col-span-2 py-8 px-4 sm:py-16 sm:px-12 md:px-36'>
+      <div>
+        <span className='font-bold text-2xl sm:text-3xl'>
+          Subscreva-se a <br/>
+          <span className='text-colorOne'>S</span>
+          <span className='text-colorTwo'>T</span>
+          <span className='text-colorThree'>E</span>
+          <span className='text-colorFour'>A</span>
+          <span className='text-colorFive'>M</span>
+        </span>
+
+        <form onSubmit={handleSubmit(handleSend)} className='space-y-4 mt-8'>
+          <div>
+            <Label htmlFor='name' className='text-sm font-medium text-colorFive'>
+              Nome completo
+            </Label>
+            <Input
+              {...register("name")}
+              id="name"
+              type='text'
+              placeholder='Seu nome completo'
+              className='mt-1 w-full rounded-lg border-colorTwo bg-slate-50/30 px-3 py-2 text-[#333] placeholder:text-muted-foreground focus:border-colorTwo focus:ring-colorTwo'
+            />
             {errors.name && <span className="text-red-500 text-sm">{errors.name.message}</span>}
-            </div>
-            <div className='grid grid-cols-2 gap-4'>
+          </div>
+          
+          <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
             <div>
-            <Label htmlFor='phone' className='text-sm font-medium text-colorFive'>Número com whatsapp</Label>
-            <Input {...register("phone")} id="phone" type='text' placeholder='Número com whatsapp' className='mt-1 w-full rounded-lg border-colorTwo bg-slate-50/30 px-3 py-2 text-[#333] placeholder:text-muted-foreground focus:border-colorTwo focus:ring-colorTwo'/>
-            {errors.phone && <span className="text-red-500 text-sm">{errors.phone.message}</span>}
+              <Label htmlFor='phone' className='text-sm font-medium text-colorFive'>
+                Número com whatsapp
+              </Label>
+              <Input
+                {...register("phone")}
+                id="phone"
+                type='text'
+                placeholder='Número com whatsapp'
+                className='mt-1 w-full rounded-lg border-colorTwo bg-slate-50/30 px-3 py-2 text-[#333] placeholder:text-muted-foreground focus:border-colorTwo focus:ring-colorTwo'
+              />
+              {errors.phone && <span className="text-red-500 text-sm">{errors.phone.message}</span>}
             </div>
             <div>
-            <Label htmlFor='email' className='text-sm font-medium text-colorFive'>E-mail</Label>
-            <Input {...register("email")} id="email" type='email' placeholder='Seu email' className='mt-1 w-full rounded-lg border-colorTwo bg-slate-50/30 px-3 py-2 text-[#333] placeholder:text-muted-foreground focus:border-colorTwo focus:ring-colorTwo'/>
-            {errors.email && <span className="text-red-500 text-sm">{errors.email.message}</span>}
+              <Label htmlFor='email' className='text-sm font-medium text-colorFive'>
+                E-mail
+              </Label>
+              <Input
+                {...register("email")}
+                id="email"
+                type='email'
+                placeholder='Seu email'
+                className='mt-1 w-full rounded-lg border-colorTwo bg-slate-50/30 px-3 py-2 text-[#333] placeholder:text-muted-foreground focus:border-colorTwo focus:ring-colorTwo'
+              />
+              {errors.email && <span className="text-red-500 text-sm">{errors.email.message}</span>}
             </div>
-            </div>
-            <div>
-            <Label htmlFor='address' className='text-sm font-medium text-colorFive'>Endereço</Label>
-            <Input {...register("address")} id="address" type='text' placeholder='Seu endereço' className='mt-1 w-full rounded-lg border-colorTwo bg-slate-50/30 px-3 py-2 text-[#333] placeholder:text-muted-foreground focus:border-colorTwo focus:ring-colorTwo'/>
+          </div>
+          
+          <div>
+            <Label htmlFor='address' className='text-sm font-medium text-colorFive'>
+              Endereço
+            </Label>
+            <Input
+              {...register("address")}
+              id="address"
+              type='text'
+              placeholder='Seu endereço'
+              className='mt-1 w-full rounded-lg border-colorTwo bg-slate-50/30 px-3 py-2 text-[#333] placeholder:text-muted-foreground focus:border-colorTwo focus:ring-colorTwo'
+            />
             {errors.address && <span className="text-red-500 text-sm">{errors.address.message}</span>}
-            </div>
-            <div className='grid grid-cols-3'>
-              <div className='col-span-2'>
-                <div className='flex flex-row justify-items-center items-center'>
-                <Checkbox {...register("check")} className='mr-4 ' />
-               <span className='text-sm text-gray-400'>
-               Aceita com todas nossas <Dialog>
+          </div>
+          
+          <div className='grid grid-cols-1 sm:grid-cols-3'>
+            <div className='col-span-2 flex items-center'>
+              <Checkbox {...register("check")} className='mr-4'/>
+              <span className='text-sm text-gray-400'>
+                Aceita com todas nossas <Dialog>
                 <DialogTrigger>
-               <span className='text-colorTwo cursor-pointer'> Políticas de Privacidade</span>
+                  <span className='text-colorTwo cursor-pointer'> Políticas de Privacidade</span>
                 </DialogTrigger>
                 <ModalPrivacy message='lo'/>
-               </Dialog> 
-                </span> 
-                </div>
-                {errors.check && <span className="text-red-500 text-sm">{errors.check.message}</span>}
-              </div>
-              <Button disabled={loading} className={`bg-colorTwo hover:bg-colorFive ${loading ?? 'bg-slate-500'}`}>
-                Enviar
-              </Button>
+                </Dialog> 
+              </span> 
             </div>
+            {errors.check && <span className="text-red-500 text-sm">{errors.check.message}</span>}
+            <Button disabled={loading} className={`bg-colorTwo hover:bg-colorFive ${loading ?? 'bg-slate-500'}`}>
+              Enviar
+            </Button>
+          </div>
 
-          </form>
-         </div>
-        </div>
+        </form>
       </div>
     </div>
+  </div>
+</div>
+
   )
 }
 

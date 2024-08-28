@@ -3,6 +3,7 @@ import { Inter, Lato } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
+import {Analytics} from '@vercel/analytics/react'
 
 const inter = Inter({ subsets: ["latin"] });
 const lato = Lato({ weight:"400",subsets: ["latin"] });
@@ -20,7 +21,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={lato.className}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>{children} <Toaster/></ThemeProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <Analytics/>
+          {children} 
+          <Toaster/>
+          </ThemeProvider>
       </body>
     </html>
   );
