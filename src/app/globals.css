@@ -84,3 +84,19 @@ body,
   background-image: url("../assets/img/img.png");
 }
 
+@media only screen and (min-width:771px) and (max-width:1309px) {
+  .mds{
+    padding-right: 48px !important;
+    padding-left: 48px !important;
+  }
+
+  .log{
+    padding: 24px;
+  }
+  .let{
+    overflow: hidden;
+display: -webkit-box;
+-webkit-box-orient: vertical;
+-webkit-line-clamp: 2;
+  }
+}

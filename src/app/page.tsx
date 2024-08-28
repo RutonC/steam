@@ -76,10 +76,10 @@ function Subscription() {
    
   }
   return (
-    <div className='back h-full w-screen flex items-center justify-center px-72'>
-      <div className='grid md:grid-cols-3 grid-cols-1 shadow-sm'>
+    <div className='back h-full w-screen flex items-center justify-center '>
+      <div className='grid md:grid-cols-3 grid-cols-1 shadow-sm w-2/3'>
         <SideLeft/>
-        <div className='bg-slate-100/30 backdrop-blur-sm col-span-2 py-16 px-36'>
+        <div className='bg-slate-100/30 backdrop-blur-sm col-span-2 py-16 px-12 mds md:px-36'>
          <div>
           <span className='font-bold text-3xl'>Subscreva-se a <br/><span className='text-colorOne'>S</span><span className='text-colorTwo'>T</span><span className='text-colorThree'>E</span><span className='text-colorFour'>A</span><span className='text-colorFive'>M</span></span>
 
