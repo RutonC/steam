@@ -137,9 +137,10 @@ function Subscription() {
   <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 shadow-sm w-full sm:w-2/3'>
     <SideLeft />
     <div className='bg-slate-100/30 backdrop-blur-sm col-span-2 py-8 px-4 sm:py-16 sm:px-12 md:px-36'>
-      <div>
+      <div className='sm:mt-12'>
         <span className='font-bold text-2xl sm:text-3xl'>
-          Subscreva-se a <br/>
+          Inscreva-se ao evento <br/>
+          de lançamento do <br/>
           <span className='text-colorOne'>S</span>
           <span className='text-colorTwo'>T</span>
           <span className='text-colorThree'>E</span>
@@ -218,7 +219,7 @@ function Subscription() {
               </span> 
             </div>
             {errors.check && <span className="text-red-500 text-sm">{errors.check.message}</span>}
-            <Button disabled={loading} className={`bg-colorTwo hover:bg-colorFive ${loading ?? 'bg-slate-500'}`}>
+            <Button disabled={loading} className={`bg-colorTwo sm:mt-4 hover:bg-colorFive ${loading ?? 'bg-slate-500'}`}>
               Enviar
             </Button>
           </div>
