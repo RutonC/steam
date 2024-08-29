@@ -210,12 +210,13 @@ function Subscription() {
             <div className='col-span-2 flex items-center'>
               <Checkbox {...register("check")} className='mr-4'/>
               <span className='text-sm text-gray-400'>
-                Aceita com todas nossas <Dialog>
-                <DialogTrigger>
+                Aceita com todas nossas 
+                {/* <Dialog> */}
+                {/* <DialogTrigger> */}
                   <span className='text-colorTwo cursor-pointer'> Políticas de Privacidade</span>
-                </DialogTrigger>
-                <ModalPrivacy message='lo'/>
-                </Dialog> 
+                {/* </DialogTrigger> */}
+                {/* <ModalPrivacy message='lo'/> */}
+                {/* </Dialog>  */}
               </span> 
             </div>
             {errors.check && <span className="text-red-500 text-sm">{errors.check.message}</span>}
