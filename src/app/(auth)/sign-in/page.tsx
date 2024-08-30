@@ -19,7 +19,7 @@ const formSchema = z.object({
 
 type CreateFormSchema = z.infer<typeof formSchema>;
 
-export default function page() {
+export default function SignIn() {
  
   const {register, handleSubmit, formState:{errors}} = useForm<CreateFormSchema>({
     resolver:zodResolver(formSchema)
