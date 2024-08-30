@@ -13,7 +13,7 @@ import SideLeft from '@/components/side-left'
 import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import { ModalPrivacy } from '@/components/modal-privacy'
 import { toast } from '@/components/ui/use-toast'
-import prisma from '@/lib/db'
+
 
 
 const createSendInfo = z.object({
@@ -34,69 +34,43 @@ function Subscription() {
   });
 
   const handleSend = async (values:CreateSendInfo) =>{
-  //  setIsLoading(true);
-    console.log(values)
+   setIsLoading(true);
 
-    try {
-      const response = await fetch('/api/subscriptions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+   fetch("https://api.emailjs.com/api/v1.0/email/send",
+      {
+        method:"POST",
+        headers:{
+          'Content-Type':"application/json"
         },
-        body: JSON.stringify({
-          name: values.name,
-          email: values.email,
-          phoneNumber: values.phone,
-          address: values.address,
-        }),
-      });
-    
-      if (!response.ok) {
-        throw new Error(`Erro na requisição: ${response.statusText}`);
+        body:JSON.stringify({
+          "service_id": "service_kunuj3r",
+    "template_id": "template_mboqt2i",
+    "user_id": "j4jq9L4NzPnJmcWUw",
+    "template_params": {
+			"from_name":"edmilton@comunika.co.mz",
+			"to_name":"inscricao@comunika.co.mz",
+       "message":`${values.name}, ${values.phone}, ${values.email}, ${values.address} `
+		}
+        })
       }
-    
-      const data = await response.json();
-      console.log("Armazenamento:", data);
-    } catch (error) {
-      console.log("Erro ao armazenar dados:", error);
-    }
-    
-
-  //  fetch("https://api.emailjs.com/api/v1.0/email/send",
-  //     {
-  //       method:"POST",
-  //       headers:{
-  //         'Content-Type':"application/json"
-  //       },
-  //       body:JSON.stringify({
-  //         "service_id": "service_kunuj3r",
-  //   "template_id": "template_mboqt2i",
-  //   "user_id": "j4jq9L4NzPnJmcWUw",
-  //   "template_params": {
-	// 		"from_name":"edmilton@comunika.co.mz",
-	// 		"to_name":"inscricao@comunika.co.mz",
-  //      "message":`${values.name}, ${values.phone}, ${values.email}, ${values.address} `
-	// 	}
-  //       })
-  //     }
-  //   ).then(data=> {
-  //     console.log("Dados sao: ", data);
-  //     if(data.status === 200){
-  //       toast({
-  //         title:"Dados de Inscrição",
-  //         description:"Seus dados de inscrição foram enviados com sucesso! Entraremos em contacto brevemente."
-  //       });
-  //       setIsLoading(false);
-  //     }else{
-  //       toast({
-  //         title:"Erro",
-  //         description:"Ocorreu um erro durante o envio dos dados. Tente mais tarde!"
-  //       });
-  //       setIsLoading(false);
-  //     }
-  //   }).catch(error => {
-  //     console.log(error)
-  //   })
+    ).then(data=> {
+      console.log("Dados sao: ", data);
+      if(data.status === 200){
+        toast({
+          title:"Dados de Inscrição",
+          description:"Seus dados de inscrição foram enviados com sucesso! Entraremos em contacto brevemente."
+        });
+        setIsLoading(false);
+      }else{
+        toast({
+          title:"Erro",
+          description:"Ocorreu um erro durante o envio dos dados. Tente mais tarde!"
+        });
+        setIsLoading(false);
+      }
+    }).catch(error => {
+      console.log(error)
+    })
 
     
 
@@ -195,7 +169,7 @@ function Subscription() {
               </span> 
             </div>
             {errors.check && <span className="text-red-500 text-sm">{errors.check.message}</span>}
-            <Button className={`bg-colorTwo sm:mt-4 hover:bg-colorFive ${loading ?? 'bg-slate-500'}`}>
+            <Button disabled={loading} className={`bg-colorTwo sm:mt-4 hover:bg-colorFive ${loading ?? 'bg-slate-500'}`}>
               Enviar
             </Button>
           </div>
