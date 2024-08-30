@@ -1,11 +1,9 @@
 "use client"
 import { Input } from '@/components/ui/input'
-import React, { useContext } from 'react'
+import React from 'react'
 import { zodResolver } from "@hookform/resolvers/zod"
 import {z} from 'zod'
 import { useForm } from "react-hook-form"
-import {User} from 'lucide-react'
-import InputField from '@/components/input-field'
 import Link from 'next/link'
 import {Button} from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
@@ -45,7 +43,7 @@ export default function page() {
                 {...register("username")}
                 id="username"
                 type='text'
-                placeholder='Número com whatsapp'
+                placeholder='Email ou username'
                 className='mt-1 w-full rounded-lg border-colorTwo bg-slate-50/30 px-3 py-2 text-[#333] placeholder:text-muted-foreground focus:border-colorTwo focus:ring-colorTwo'
               />
                 </div>
