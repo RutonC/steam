@@ -1,6 +1,4 @@
 "use client"
-// import { Button } from '@/components/ui/button'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import React, { useContext } from 'react'
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -10,6 +8,7 @@ import {User} from 'lucide-react'
 import InputField from '@/components/input-field'
 import Link from 'next/link'
 import {Button} from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
 
 
 const formSchema = z.object({
@@ -20,40 +19,56 @@ const formSchema = z.object({
 })
 
 
+type CreateFormSchema = z.infer<typeof formSchema>;
+
 export default function page() {
  
+  const {register, handleSubmit, formState:{errors}} = useForm<CreateFormSchema>({
+    resolver:zodResolver(formSchema)
+  });
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      username: "",
-      password:""
-    },
-  })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values:CreateFormSchema) {
     console.log(values);
   }
 
   return (
     <div className='w-[500px] bg-white border rounded-sm shadow-sm p-12'>
       <h2 className='text-2xl font-semibold'>Bem-vindo de Volta ✌️</h2>
-      <p className='text-sm text-secondary font-medium text-slate-400'>Use suas credenciais para aceder sua conta.</p>
+      <p className='text-sm text-secondary font-medium text-slate-400'>Use suas credenciais para aceder sua conta.</p>     
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-8">
+        <div>
+        <Label htmlFor='name' className='text-sm font-medium text-colorFive'>
+              Email ou username
+        </Label>
+        <Input
+                {...register("username")}
+                id="username"
+                type='text'
+                placeholder='Número com whatsapp'
+                className='mt-1 w-full rounded-lg border-colorTwo bg-slate-50/30 px-3 py-2 text-[#333] placeholder:text-muted-foreground focus:border-colorTwo focus:ring-colorTwo'
+              />
+                </div>
+                <div>
+                <Label htmlFor='name' className='text-sm font-medium text-colorFive'>
+              Password
+            </Label>
+        <Input
+                {...register("password")}
+                id="password"
+                type='password'
+                placeholder='Password'
+                className='mt-1 w-full rounded-lg border-colorTwo bg-slate-50/30 px-3 py-2 text-[#333] placeholder:text-muted-foreground focus:border-colorTwo focus:ring-colorTwo'
+                />
+                </div>
 
-      <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <div className='mt-4'>
-        <InputField name='username' label='Username' control={form.control} placeholder='Username'/>
-        <InputField name='password' type='password' label='Palavra-passe' control={form.control} placeholder='Palavra-passe'/>
-        </div>
+        
         <p className='text-right'>
         <Link href="/change-password" className='text-primary font-semibold'>Esqueceu palavra-passe?</Link>
         </p>
        
         <Button className='w-full h-12 font-semibold'>Entrar</Button>
       </form>
-      </Form>
-
     </div>
   )
 }
