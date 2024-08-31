@@ -7,6 +7,8 @@ import { useForm } from "react-hook-form"
 import Link from 'next/link'
 import {Button} from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
+import { apiURL } from '@/lib/constants'
+import {useRouter} from 'next/navigation'
 
 
 const formSchema = z.object({
@@ -21,13 +23,37 @@ type CreateFormSchema = z.infer<typeof formSchema>;
 
 export default function SignIn() {
  
+  const {push} = useRouter();
   const {register, handleSubmit, formState:{errors}} = useForm<CreateFormSchema>({
     resolver:zodResolver(formSchema)
   });
 
 
-  function onSubmit(values:CreateFormSchema) {
+ async function onSubmit(values:CreateFormSchema) {
     console.log(values);
+    try {
+      const response = await fetch(`${apiURL.base}/sign-in`,{
+        method:"POST",
+        headers:{
+          'Content-Type':'application/json'
+        },
+        body:JSON.stringify({
+          username:values.username,
+          password:values.password
+        })
+      });
+
+      const data = await response.json();
+      console.log("Login",data);
+
+      if(response.status === 500 || response.status === 404){
+        console.log("Senha ou usuário incorrento")
+      }else{
+        push('/dasboard');
+      }
+    } catch (error) {
+      
+    }
   }
 
   return (
