@@ -10,15 +10,18 @@ import { useRouter } from 'next/navigation';
 
 export const MainContext = React.createContext({});
 
-const initialUser =
-    localStorage.getItem("user") ?
-        JSON.parse(localStorage.getItem("user") || "{}")
+let initialUser = null;
+let initialToken = null;
+
+if (typeof window !== "undefined") {
+    initialUser = localStorage.getItem("user") 
+        ? JSON.parse(localStorage.getItem("user") || "{}")
         : null;
 
-const initialToken =
-    localStorage.getItem("token") ?
-        JSON.parse(localStorage.getItem("token") || "")
+    initialToken = localStorage.getItem("token")
+        ? JSON.parse(localStorage.getItem("token") || "")
         : null;
+}
 
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
