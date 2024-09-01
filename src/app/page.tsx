@@ -1,10 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Presentation, Computer, Cog } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, UseFormResetField } from "react-hook-form";
 import { z } from "zod";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -14,6 +14,7 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { ModalPrivacy } from "@/components/modal-privacy";
 import { useToast } from "@/components/ui/use-toast";
 import { apiURL } from "@/lib/constants";
+import { MainContext } from "./context/main.context";
 
 const createSendInfo = z.object({
   name: z.string().min(3, "Seu nome deve ser 3 caracteres no mínimo"),
@@ -28,11 +29,12 @@ const createSendInfo = z.object({
 type CreateSendInfo = z.infer<typeof createSendInfo>;
 
 function Subscription() {
-  const [loading, setIsLoading] = useState<boolean>(false);
+  const {isLoading,setLoading}:any = useContext(MainContext);
   const { toast } = useToast();
 
   const {
     register,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm<CreateSendInfo>({
@@ -40,7 +42,7 @@ function Subscription() {
   });
 
   const handleSend = async (values: CreateSendInfo) => {
-    setIsLoading(true);
+    setLoading(true);
 
     try {
       const response = await fetch(`${apiURL.base}/participant`, {
@@ -83,7 +85,8 @@ function Subscription() {
         }).catch((error) => {
           console.log(error);
         });
-        setIsLoading(false);
+        setLoading(false);
+        reset();
       } else if (response.status === 500) {
         console.log("error")
         toast({
@@ -91,11 +94,11 @@ function Subscription() {
           title: "Falha na inscrição",
           description: "Encontra-se já inscrito!",
         });
-        setIsLoading(false);
+        setLoading(false);
       }
     } catch (error) {
       console.log(error);
-      setIsLoading(false);
+      setLoading(false);
     }
   };
   return (
@@ -242,9 +245,9 @@ function Subscription() {
                   </span>
                 )}
                 <Button
-                  disabled={loading}
+                  disabled={isLoading}
                   className={`bg-colorTwo sm:mt-4 hover:bg-colorFive ${
-                    loading ?? "bg-slate-500"
+                    isLoading ?? "bg-colorFive"
                   }`}
                 >
                   Enviar

@@ -1,6 +1,6 @@
 "use client"
 import { Input } from '@/components/ui/input'
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import { zodResolver } from "@hookform/resolvers/zod"
 import {z} from 'zod'
 import { useForm } from "react-hook-form"
@@ -9,6 +9,7 @@ import {Button} from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { apiURL } from '@/lib/constants'
 import {useRouter} from 'next/navigation'
+import { MainContext } from '@/app/context/main.context'
 
 
 const formSchema = z.object({
@@ -22,7 +23,7 @@ const formSchema = z.object({
 type CreateFormSchema = z.infer<typeof formSchema>;
 
 export default function SignIn() {
- 
+  const {error, user, login}:any = useContext(MainContext)
   const {push} = useRouter();
   const {register, handleSubmit, formState:{errors}} = useForm<CreateFormSchema>({
     resolver:zodResolver(formSchema)
@@ -31,29 +32,7 @@ export default function SignIn() {
 
  async function onSubmit(values:CreateFormSchema) {
     console.log(values);
-    try {
-      const response = await fetch(`${apiURL.base}/sign-in`,{
-        method:"POST",
-        headers:{
-          'Content-Type':'application/json'
-        },
-        body:JSON.stringify({
-          username:values.username,
-          password:values.password
-        })
-      });
-
-      const data = await response.json();
-      console.log("Login",data);
-
-      if(response.status === 500 || response.status === 404){
-        console.log("Senha ou usuário incorrento")
-      }else{
-        push('/dasboard');
-      }
-    } catch (error) {
-      
-    }
+    login(values.username, values.password);
   }
 
   return (
@@ -70,7 +49,7 @@ export default function SignIn() {
                 id="username"
                 type='text'
                 placeholder='Email ou username'
-                className='mt-1 w-full rounded-lg border-colorTwo bg-slate-50/30 px-3 py-2 text-[#333] placeholder:text-muted-foreground focus:border-colorTwo focus:ring-colorTwo'
+                className='mt-1 h-12 w-full rounded-lg border-colorTwo bg-slate-50/30 px-3 py-2 text-[#333] placeholder:text-muted-foreground focus:border-colorTwo focus:ring-colorTwo'
               />
                 </div>
                 <div>
@@ -82,16 +61,16 @@ export default function SignIn() {
                 id="password"
                 type='password'
                 placeholder='Password'
-                className='mt-1 w-full rounded-lg border-colorTwo bg-slate-50/30 px-3 py-2 text-[#333] placeholder:text-muted-foreground focus:border-colorTwo focus:ring-colorTwo'
+                className='h-12 mt-1 w-full rounded-lg border-colorTwo bg-slate-50/30 px-3 py-2 text-[#333] placeholder:text-muted-foreground focus:border-colorTwo focus:ring-colorTwo'
                 />
                 </div>
+                
 
         
-        <p className='text-right'>
-        <Link href="/change-password" className='text-primary font-semibold'>Esqueceu palavra-passe?</Link>
+        <p className='text-left text-sm text-red-500'>
+        {error && (<span>{error}</span>)}
         </p>
-       
-        <Button className='w-full h-12 font-semibold'>Entrar</Button>
+        <Button className='w-full h-12 font-semibold bg-colorTwo hover:bg-colorFive'>Entrar</Button>
       </form>
     </div>
   )

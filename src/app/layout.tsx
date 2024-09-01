@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { Analytics } from "@vercel/analytics/react";
+import { MainContextProvider } from "./context/main.context";
 
 
 const lato = Lato({ weight: "400", subsets: ["latin"] });
@@ -22,15 +23,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={lato.className}>
+        <MainContextProvider>
+
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
-        >
+          >
           <Analytics />
           {children}
         </ThemeProvider>
+          </MainContextProvider>
         <Toaster />
       </body>
     </html>
